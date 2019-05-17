@@ -1,5 +1,4 @@
 import cadquery as cq
-from Helpers import show
 
 baseXWidth = 50.0
 baseYWidth = 50.0
@@ -33,10 +32,10 @@ case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
 innerSpace = cq.Workplane('XY').box(innerXWidth, innerYWidth, innerHeight) \
 	.edges('|Z').fillet(innerCornerR) \
 	.translate((0, 0, innerHeight/2))
+case.cut(innerSpace)
 
 topHook = cq.Workplane('XY').box(topHookXLength, topHookYLength, topHookHeight) \
 	.edges('|Z and <X and <Y').fillet(topHookCornerR)
-
 topHookSpace = cq.Workplane('XY').box(topHookSpaceXLength, topHookSpaceYLength ,topHookHeight) \
 	.edges('|Z and <X and <Y').fillet(topHookSpaceCornerR) \
 	.translate((
@@ -44,16 +43,15 @@ topHookSpace = cq.Workplane('XY').box(topHookSpaceXLength, topHookSpaceYLength ,
 		(topHookYLength - topHookSpaceYLength) /2, \
 		0 \
 	))
-
 topHook.cut(topHookSpace)
 topHook = topHook.translate(( \
 		- innerXWidth/2 + topHookSpaceXLength / 2 - topHookOuterFromBase/2, \
 		- innerYWidth/2 + topHookSpaceYLength / 2 - topHookOuterFromBase/2, \
-		innerHeight/2 + topHookHeight/2, \
-	))
+		innerHeight/2 + topHookHeight/2))
+case = case \
+	.union(topHook) \
+	.union(topHook.mirror(mirrorPlane='YZ')) \
+	.union(topHook.mirror(mirrorPlane='XZ')) \
+	.union(topHook.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
 
-show(topHook)
-
-case.cut(innerSpace)
-
-show(case)
+show_object(case, options={'rgba': (204, 204, 204, 0.4)})
