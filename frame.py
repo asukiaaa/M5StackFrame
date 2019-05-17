@@ -24,6 +24,16 @@ topHookCornerR = baseCornerR + topHookOuterFromBase
 topHookSpaceXLength = topHookXLengthFromBase + baseToInnerOffset
 topHookSpaceYLength = topHookYLengthFromBase + baseToInnerOffset
 topHookSpaceCornerR = baseCornerR + baseToInnerOffset
+bottomSpaceHeightOffset = 0.5
+bottomSpaceLengthOffset = 0.5
+bottomSpaceWidthOffset = 0.3
+bottomSpaceWidthFromBase = topHookOuterFromBase + bottomSpaceWidthOffset
+bottomSpaceHeight = topHookHeight + bottomSpaceHeightOffset
+bottomSpaceXLengthFromBase = topHookXLengthFromBase + bottomSpaceLengthOffset
+bottomSpaceYLengthFromBase = topHookYLengthFromBase + bottomSpaceLengthOffset
+bottomSpaceXLength = bottomSpaceXLengthFromBase + bottomSpaceWidthFromBase
+bottomSpaceYLength = bottomSpaceYLengthFromBase + bottomSpaceWidthFromBase
+bottomSpaceCornerR = topHookCornerR + bottomSpaceWidthOffset
 
 case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
 	.edges('|Z').fillet(outerCornerR) \
@@ -53,5 +63,16 @@ case = case \
 	.union(topHook.mirror(mirrorPlane='YZ')) \
 	.union(topHook.mirror(mirrorPlane='XZ')) \
 	.union(topHook.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
+
+bottomSpace = cq.Workplane('XY').box(bottomSpaceXLength, bottomSpaceYLength, bottomSpaceHeight) \
+	.edges('|Z and <X and <Y').fillet(bottomSpaceCornerR) \
+	.translate((
+		- innerXWidth / 2 + bottomSpaceXLength / 2 - bottomSpaceWidthFromBase,
+		- innerYWidth / 2 + bottomSpaceYLength / 2 - bottomSpaceWidthFromBase,
+		bottomSpaceHeight / 2))
+case.cut(bottomSpace)
+case.cut(bottomSpace.mirror(mirrorPlane='YZ'))
+case.cut(bottomSpace.mirror(mirrorPlane='XZ'))
+case.cut(bottomSpace.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
 
 show_object(case, options={'rgba': (204, 204, 204, 0.4)})
