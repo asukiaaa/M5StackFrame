@@ -13,7 +13,7 @@ outerCornerR = baseCornerR + baseToOuterOffset
 innerXWidth = baseXWidth + baseToInnerOffset * 2
 innerYWidth = baseYWidth + baseToInnerOffset * 2
 innerCornerR = baseCornerR + baseToInnerOffset
-innerHeight = baseHeight*2
+innerHeight = baseHeight * 2
 topHookXLengthFromBase = 5.0
 topHookYLengthFromBase = 3.0
 topHookHeight = 1.0
@@ -43,11 +43,11 @@ screwHoleMountHeight = 2.0
 
 case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
 	.edges('|Z').fillet(outerCornerR) \
-	.translate((0, 0, baseHeight/2))
+	.translate((0, 0, baseHeight / 2))
 
 innerSpace = cq.Workplane('XY').box(innerXWidth, innerYWidth, innerHeight) \
 	.edges('|Z').fillet(innerCornerR) \
-	.translate((0, 0, innerHeight/2))
+	.translate((0, 0, innerHeight / 2))
 case.cut(innerSpace)
 
 topHook = cq.Workplane('XY').box(topHookXLength, topHookYLength, topHookHeight) \
@@ -55,15 +55,15 @@ topHook = cq.Workplane('XY').box(topHookXLength, topHookYLength, topHookHeight) 
 topHookSpace = cq.Workplane('XY').box(topHookSpaceXLength, topHookSpaceYLength ,topHookHeight) \
 	.edges('|Z and <X and <Y').fillet(topHookSpaceCornerR) \
 	.translate((
-		(topHookXLength - topHookSpaceXLength) /2, \
-		(topHookYLength - topHookSpaceYLength) /2, \
+		(topHookXLength - topHookSpaceXLength) / 2, \
+		(topHookYLength - topHookSpaceYLength) / 2, \
 		0 \
 	))
 topHook.cut(topHookSpace)
 topHook = topHook.translate(( \
-		- innerXWidth/2 + topHookSpaceXLength / 2 - topHookOuterFromBase/2, \
-		- innerYWidth/2 + topHookSpaceYLength / 2 - topHookOuterFromBase/2, \
-		innerHeight/2 + topHookHeight/2))
+		- innerXWidth / 2 + topHookSpaceXLength / 2 - topHookOuterFromBase / 2, \
+		- innerYWidth / 2 + topHookSpaceYLength / 2 - topHookOuterFromBase / 2, \
+		innerHeight / 2 + topHookHeight / 2))
 case = case \
 	.union(topHook) \
 	.union(topHook.mirror(mirrorPlane='YZ')) \
