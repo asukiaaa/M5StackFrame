@@ -34,6 +34,12 @@ bottomSpaceYLengthFromBase = topHookYLengthFromBase + bottomSpaceLengthOffset
 bottomSpaceXLength = bottomSpaceXLengthFromBase + bottomSpaceWidthFromBase
 bottomSpaceYLength = bottomSpaceYLengthFromBase + bottomSpaceWidthFromBase
 bottomSpaceCornerR = topHookCornerR + bottomSpaceWidthOffset
+screwHoleXFromBase = 10.0
+screwHoleYFromBase = 3.0
+screwHoleZFromBase = 0.0
+screwHoleR = 2.0 / 2
+screwHoleMountR = 5.0 / 2
+screwHoleMountHeight = 2.0
 
 case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
 	.edges('|Z').fillet(outerCornerR) \
@@ -74,5 +80,27 @@ case.cut(bottomSpace)
 case.cut(bottomSpace.mirror(mirrorPlane='YZ'))
 case.cut(bottomSpace.mirror(mirrorPlane='XZ'))
 case.cut(bottomSpace.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
+
+screwHoleXFromBase = 10.0
+screwHoleYFromBase = 3.0
+screwHoleR = 2.0 / 2
+screwHoleMountR = 5.0 / 2
+screwHoleHeight = 2.0
+
+screwHole = cq.Workplane('XY').circle(screwHoleR).extrude(screwHoleMountHeight)
+screwHoleMountBox = cq.Workplane('XY').box(screwHoleMountR * 2, screwHoleYFromBase, screwHoleMountHeight) \
+	.translate((0, screwHoleYFromBase / 2, screwHoleMountHeight / 2))
+screwHoleMount = cq.Workplane('XY').circle(screwHoleMountR).extrude(screwHoleMountHeight) \
+	.union(screwHoleMountBox) \
+	.cut(screwHole) \
+	.translate((
+		innerXWidth / 2 - screwHoleXFromBase,
+		innerYWidth / 2 - screwHoleYFromBase,
+		outerHeight - screwHoleMountHeight - screwHoleZFromBase))
+case = case \
+	.union(screwHoleMount) \
+	.union(screwHoleMount.mirror(mirrorPlane='YZ')) \
+	.union(screwHoleMount.mirror(mirrorPlane='XZ')) \
+	.union(screwHoleMount.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
 
 show_object(case, options={'rgba': (204, 204, 204, 0.4)})
