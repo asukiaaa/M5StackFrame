@@ -39,6 +39,10 @@ screwHoleZFromBase = 0.0
 screwHoleR = 2.2 / 2
 screwHoleMountR = 4.4 / 2
 screwHoleMountHeight = 2.0
+bottomReleaseSpaceHeight = 0.9
+bottomReleaseSpaceLowerWidth = 7.8
+bottomReleaseSpaceYFromBase = 10.0
+bottomReleaseSpaceThickness = baseToOuterOffset + baseToInnerOffset
 
 case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
 	.edges('|Z').fillet(outerCornerR) \
@@ -95,5 +99,10 @@ case = case \
 	.union(screwHoleMount.mirror(mirrorPlane='YZ')) \
 	.union(screwHoleMount.mirror(mirrorPlane='XZ')) \
 	.union(screwHoleMount.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
+
+bottomReleaseSpace = cq.Workplane('XY').box(bottomReleaseSpaceThickness, bottomReleaseSpaceLowerWidth, bottomReleaseSpaceHeight) \
+	.edges('|X and >Z').chamfer(bottomReleaseSpaceHeight-0.01) \
+	.translate((innerXWidth / 2 + bottomReleaseSpaceThickness / 2, -innerYWidth / 2 + bottomReleaseSpaceYFromBase, bottomReleaseSpaceHeight / 2))
+case.cut(bottomReleaseSpace)
 
 show_object(case, options={'rgba': (204, 204, 204, 0.4)})
