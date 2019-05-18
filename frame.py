@@ -2,7 +2,7 @@ import cadquery as cq
 
 baseXWidth = 50.0
 baseYWidth = 50.0
-baseHeight = 5.0
+baseHeight = 6.0
 baseCornerR = 2.2
 baseToOuterOffset = 2.0
 baseToInnerOffset = 0
@@ -14,10 +14,10 @@ innerXWidth = baseXWidth + baseToInnerOffset * 2
 innerYWidth = baseYWidth + baseToInnerOffset * 2
 innerCornerR = baseCornerR + baseToInnerOffset
 innerHeight = baseHeight * 2
-topHookXLengthFromBase = 5.0
-topHookYLengthFromBase = 3.0
-topHookHeight = 1.0
-topHookOuterFromBase = 0.8
+topHookXLengthFromBase = 8.0
+topHookYLengthFromBase = 5.0
+topHookHeight = 0.7
+topHookOuterFromBase = 0.6
 topHookXLength = topHookXLengthFromBase + topHookOuterFromBase
 topHookYLength = topHookYLengthFromBase + topHookOuterFromBase
 topHookCornerR = baseCornerR + topHookOuterFromBase
@@ -25,20 +25,19 @@ topHookSpaceXLength = topHookXLengthFromBase + baseToInnerOffset
 topHookSpaceYLength = topHookYLengthFromBase + baseToInnerOffset
 topHookSpaceCornerR = baseCornerR + baseToInnerOffset
 bottomSpaceHeightOffset = 0.5
-bottomSpaceLengthOffset = 0.5
-bottomSpaceWidthOffset = 0.3
-bottomSpaceWidthFromBase = topHookOuterFromBase + bottomSpaceWidthOffset
+bottomSpaceLengthOffset = 1.0
+bottomSpaceWidthFromBase = 1.1
 bottomSpaceHeight = topHookHeight + bottomSpaceHeightOffset
 bottomSpaceXLengthFromBase = topHookXLengthFromBase + bottomSpaceLengthOffset
 bottomSpaceYLengthFromBase = topHookYLengthFromBase + bottomSpaceLengthOffset
 bottomSpaceXLength = bottomSpaceXLengthFromBase + bottomSpaceWidthFromBase
 bottomSpaceYLength = bottomSpaceYLengthFromBase + bottomSpaceWidthFromBase
-bottomSpaceCornerR = topHookCornerR + bottomSpaceWidthOffset
-screwHoleXFromBase = 10.0
+bottomSpaceCornerR = baseCornerR + bottomSpaceWidthFromBase
+screwHoleXFromBase = 7.0
 screwHoleYFromBase = 3.0
 screwHoleZFromBase = 0.0
-screwHoleR = 2.0 / 2
-screwHoleMountR = 5.0 / 2
+screwHoleR = 2.2 / 2
+screwHoleMountR = 4.4 / 2
 screwHoleMountHeight = 2.0
 
 case = cq.Workplane('XY').box(outerXWidth, outerYWidth, outerHeight) \
@@ -80,12 +79,6 @@ case.cut(bottomSpace)
 case.cut(bottomSpace.mirror(mirrorPlane='YZ'))
 case.cut(bottomSpace.mirror(mirrorPlane='XZ'))
 case.cut(bottomSpace.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
-
-screwHoleXFromBase = 10.0
-screwHoleYFromBase = 3.0
-screwHoleR = 2.0 / 2
-screwHoleMountR = 5.0 / 2
-screwHoleHeight = 2.0
 
 screwHole = cq.Workplane('XY').circle(screwHoleR).extrude(screwHoleMountHeight)
 screwHoleMountBox = cq.Workplane('XY').box(screwHoleMountR * 2, screwHoleYFromBase, screwHoleMountHeight) \
