@@ -1,4 +1,6 @@
 import cadquery as cq
+import sys
+import os
 
 baseXWidth = 50.0
 baseYWidth = 50.0
@@ -105,4 +107,43 @@ bottomReleaseSpace = cq.Workplane('XY').box(bottomReleaseSpaceThickness, bottomR
 	.translate((innerXWidth / 2 + bottomReleaseSpaceThickness / 2, -innerYWidth / 2 + bottomReleaseSpaceYFromBase, bottomReleaseSpaceHeight / 2))
 case.cut(bottomReleaseSpace)
 
-show_object(case, options={'rgba': (204, 204, 204, 0.4)})
+if 'FreeCADGui' in sys.modules:
+	show_object(case, options={'rgba': (204, 204, 204, 0.4)})
+
+dirpath = os.environ.get("MYPROJECT_DIR")
+
+if dirpath is None:
+	try:
+		 # dirpath = os.environ.get("MYPROJECT_DIR")
+		import Shared
+		path = Shared.getActiveCodePane().get_path()
+		dirpath = os.path.dirname(os.path.abspath(path))
+		print('dirpath', dirpath)
+	except:
+		print('cannot use getActiveCode')
+
+if dirpath is None:
+	try:
+		print('__file__', __file__)
+		dirpath = os.path.dirname(os.path.realpath(__file__))
+	except:
+		print('cannot use __file__')
+
+if 'FreeCADGui' in sys.modules:
+	filepath = dirpath + '/frame_by_freecad_gui_cadquery.stl'
+	with open(filepath, 'w') as f:
+		cq.exporters.exportShape(case, 'STL', f)
+	print('exported', filepath)
+elif 'FreeCAD' in sys.modules:
+	filepath = dirpath + '/frame_by_freecad_cadquery.stl'
+	with open(filepath, 'w') as f:
+		cq.exporters.exportShape(case, 'STL', f)
+	print('exported', filepath)
+
+if 'OCC' in sys.modules:
+	filepath = dirpath + '/frame_by_occ_cadquery.stl'
+	# cq.occ_impl.shapes.Shape.exportStl(case, filepath)
+	with open(filepath, 'w') as f:
+		# cq.occ_impl.shapes.Shape.exportShape(case, 'STL', f)
+		cq.exporters.exportShape(case, 'STL', f, tolerance=0.01)
+	print('exported', filepath)
