@@ -111,17 +111,15 @@ if 'FreeCADGui' in sys.modules:
 	show_object(case, options={'rgba': (204, 204, 204, 0.4)})
 
 dirpath = os.environ.get("MYSCRIPT_DIR")
-# dirpath = os.environ["MYSCRIPT_DIR"]
 
-#if dirpath is None:
-#	try:
-#		 # dirpath = os.environ.get("MYPROJECT_DIR")
-#		import Shared
-#		path = Shared.getActiveCodePane().get_path()
-#		dirpath = os.path.dirname(os.path.abspath(path))
-#		print('dirpath', dirpath)
-#	except:
-#		print('cannot use getActiveCode')
+if dirpath is None:
+	try:
+		import Shared
+		path = Shared.getActiveCodePane().get_path()
+		dirpath = os.path.dirname(os.path.abspath(path))
+		print('dirpath', dirpath)
+	except:
+		print('cannot use getActiveCode')
 
 if dirpath is None:
 	try:
