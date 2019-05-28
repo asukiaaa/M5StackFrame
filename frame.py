@@ -19,13 +19,14 @@ innerHeight = baseHeight * 2
 topHookXLengthFromBase = 8.0
 topHookYLengthFromBase = 5.0
 topHookHeight = 0.7
-topHookOuterFromBase = 0.6
+topHookInnerFromBase = -0.2
+topHookOuterFromBase = 0.8
 topHookXLength = topHookXLengthFromBase + topHookOuterFromBase
 topHookYLength = topHookYLengthFromBase + topHookOuterFromBase
 topHookCornerR = baseCornerR + topHookOuterFromBase
-topHookSpaceXLength = topHookXLengthFromBase + baseToInnerOffset
-topHookSpaceYLength = topHookYLengthFromBase + baseToInnerOffset
-topHookSpaceCornerR = baseCornerR + baseToInnerOffset
+topHookSpaceXLength = topHookXLengthFromBase + baseToInnerOffset - topHookInnerFromBase
+topHookSpaceYLength = topHookYLengthFromBase + baseToInnerOffset - topHookInnerFromBase
+topHookSpaceCornerR = baseCornerR + baseToInnerOffset - topHookInnerFromBase
 bottomSpaceHeightOffset = 0.5
 bottomSpaceLengthOffset = 1.0
 bottomSpaceWidthFromBase = 1.1
@@ -66,8 +67,8 @@ topHookSpace = cq.Workplane('XY').box(topHookSpaceXLength, topHookSpaceYLength ,
 	))
 topHook.cut(topHookSpace)
 topHook = topHook.translate(( \
-		- innerXWidth / 2 + topHookSpaceXLength / 2 - topHookOuterFromBase / 2, \
-		- innerYWidth / 2 + topHookSpaceYLength / 2 - topHookOuterFromBase / 2, \
+		- baseXWidth / 2 + topHookXLength / 2 - topHookOuterFromBase, \
+		- baseYWidth / 2 + topHookYLength / 2 - topHookOuterFromBase, \
 		innerHeight / 2 + topHookHeight / 2))
 case = case \
 	.union(topHook) \
