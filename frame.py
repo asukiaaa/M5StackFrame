@@ -4,7 +4,7 @@ import os
 
 baseXWidth = 50.0
 baseYWidth = 50.0
-baseHeight = 6.0
+baseHeight = 6.6
 baseCornerR = 2.2
 baseToOuterOffset = 2.0
 baseToInnerOffset = 0
