@@ -2,6 +2,9 @@ import cadquery as cq
 import sys
 import os
 
+forM200Plus = False
+# forM200Plus = True
+
 baseXWidth = 50.0
 baseYWidth = 50.0
 baseHeight = 6.6
@@ -30,6 +33,8 @@ topHookSpaceCornerR = baseCornerR + baseToInnerOffset - topHookInnerFromBase
 bottomSpaceHeightOffset = 0.5
 bottomSpaceLengthOffset = 1.0
 bottomSpaceWidthFromBase = 1.1
+if forM200Plus:
+        bottomSpaceWidthFromBase = 1.2
 bottomSpaceHeight = topHookHeight + bottomSpaceHeightOffset
 bottomSpaceXLengthFromBase = topHookXLengthFromBase + bottomSpaceLengthOffset
 bottomSpaceYLengthFromBase = topHookYLengthFromBase + bottomSpaceLengthOffset
@@ -70,11 +75,12 @@ topHook = topHook.translate(( \
 		- baseXWidth / 2 + topHookXLength / 2 - topHookOuterFromBase, \
 		- baseYWidth / 2 + topHookYLength / 2 - topHookOuterFromBase, \
 		innerHeight / 2 + topHookHeight / 2))
-case = case \
-	.union(topHook) \
-	.union(topHook.mirror(mirrorPlane='YZ')) \
-	.union(topHook.mirror(mirrorPlane='XZ')) \
-	.union(topHook.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
+if not forM200Plus:
+	case = case \
+		.union(topHook) \
+		.union(topHook.mirror(mirrorPlane='YZ')) \
+		.union(topHook.mirror(mirrorPlane='XZ')) \
+		.union(topHook.mirror(mirrorPlane='XZ').mirror(mirrorPlane='YZ'))
 
 bottomSpace = cq.Workplane('XY').box(bottomSpaceXLength, bottomSpaceYLength, bottomSpaceHeight) \
 	.edges('|Z and <X and <Y').fillet(bottomSpaceCornerR) \
