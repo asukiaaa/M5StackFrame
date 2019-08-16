@@ -10,7 +10,9 @@ baseYWidth = 50.0
 baseHeight = 6.6
 baseCornerR = 2.2
 baseToOuterOffset = 2.0
-baseToInnerOffset = 0
+baseToInnerOffset = 0.0
+if forM200Plus:
+	baseToInnerOffset = 0.2
 outerXWidth = baseXWidth + baseToOuterOffset * 2
 outerYWidth = baseYWidth + baseToOuterOffset * 2
 outerHeight = baseHeight
